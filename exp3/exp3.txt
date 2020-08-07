@@ -1,3 +1,0 @@
-5class (Australia, Canada, England, India, US)
-10000dataset * 5
-avg len
