@@ -2,6 +2,7 @@ import torchaudio
 import os
 import csv
 import pandas as pd
+import unicodedata
 
 #####path수정, index수정 필요
 
@@ -21,7 +22,12 @@ us_path='/home/skgudwn34/Accented_speech/speech_recognition/dataset/test_dataset
 
 save_path='/home/skgudwn34/Accented_speech/speech_recognition/input_data/'
 
+###remove acute accents
+def remove_accents(sentence):
+    nkfd_form = unicodedata.normalize('NFKD', sentence)
+    return u"".join([c for c in nkfd_form if not unicodedata.combining(c)])
 
+###make dataset
 def make_dataset(data_path,csv_file):
 
     aus_index=0
@@ -48,7 +54,7 @@ def make_dataset(data_path,csv_file):
 
                 waveform, sample_rate=torchaudio.load(data_path+csv_line[0])
 
-                df_dict[aus_index]=(csv_line[0],csv_line[1],csv_line[2],sample_rate,waveform)
+                df_dict[aus_index]=(csv_line[0],csv_line[1],remove_accents(csv_line[2]),sample_rate,waveform)
                 aus_index+=1
 
         aus_df=pd.DataFrame.from_dict(df_dict, orient='index', columns=['File', 'Accent','Sentence','Sample_rate','Waveform'])
@@ -73,7 +79,7 @@ def make_dataset(data_path,csv_file):
 
                 waveform, sample_rate=torchaudio.load(data_path+csv_line[0])
 
-                df_dict[can_index]=(csv_line[0],csv_line[1],csv_line[2],sample_rate,waveform)
+                df_dict[can_index]=(csv_line[0],csv_line[1],remove_accents(csv_line[2]),sample_rate,waveform)
                 can_index+=1
 
         can_df=pd.DataFrame.from_dict(df_dict, orient='index', columns=['File', 'Accent','Sentence','Sample_rate','Waveform'])
@@ -98,7 +104,7 @@ def make_dataset(data_path,csv_file):
 
                 waveform, sample_rate=torchaudio.load(data_path+csv_line[0])
 
-                df_dict[eng_index]=(csv_line[0],csv_line[1],csv_line[2],sample_rate,waveform)
+                df_dict[eng_index]=(csv_line[0],csv_line[1],remove_accents(csv_line[2]),sample_rate,waveform)
                 eng_index+=1
 
         eng_df=pd.DataFrame.from_dict(df_dict, orient='index', columns=['File', 'Accent','Sentence','Sample_rate','Waveform'])
@@ -123,7 +129,7 @@ def make_dataset(data_path,csv_file):
 
                 waveform, sample_rate=torchaudio.load(data_path+csv_line[0])
 
-                df_dict[ind_index]=(csv_line[0],csv_line[1],csv_line[2],sample_rate,waveform)
+                df_dict[ind_index]=(csv_line[0],csv_line[1],remove_accents(csv_line[2]),sample_rate,waveform)
                 ind_index+=1
 
         ind_df=pd.DataFrame.from_dict(df_dict, orient='index', columns=['File', 'Accent','Sentence','Sample_rate','Waveform'])
@@ -149,7 +155,7 @@ def make_dataset(data_path,csv_file):
 
                 waveform, sample_rate=torchaudio.load(data_path+csv_line[0])
 
-                df_dict[us_index]=(csv_line[0],csv_line[1],csv_line[2],sample_rate,waveform)
+                df_dict[us_index]=(csv_line[0],csv_line[1],remove_accents(csv_line[2]),sample_rate,waveform)
                 us_index+=1
 
         us_df=pd.DataFrame.from_dict(df_dict, orient='index', columns=['File', 'Accent','Sentence','Sample_rate','Waveform'])
@@ -158,17 +164,14 @@ def make_dataset(data_path,csv_file):
 
 
 aus_test_df=make_dataset(aus_path,aus_csv)
-print(aus_test_df)
 can_test_df=make_dataset(can_path,can_csv)
-print(can_test_df)
 eng_test_df=make_dataset(eng_path,eng_csv)
-print(eng_test_df)
 ind_test_df=make_dataset(ind_path,ind_csv)
-print(ind_test_df)
 us_test_df=make_dataset(us_path,us_csv)
-print(us_test_df)
 
 test_df=pd.concat([aus_test_df,can_test_df,eng_test_df,ind_test_df,us_test_df])
-print(test_df)
+
+###data save
 
 test_df.to_pickle(save_path+'test_set') 
+#test_df.to_csv(save_path+'test_set.csv',index=False)
