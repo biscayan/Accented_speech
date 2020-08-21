@@ -31,6 +31,8 @@ def DataProcessing(data,data_type):
     for (_, _, sentence, _, waveform) in data:
         if data_type == 'train':
             spec=train_audio_transforms(waveform).squeeze(0).transpose(0,1)
+        elif data_type == 'val':
+            spec=test_audio_transforms(waveform).squeeze(0).transpose(0,1)
         elif data_type == 'test':
             spec=test_audio_transforms(waveform).squeeze(0).transpose(0,1)
         else:
