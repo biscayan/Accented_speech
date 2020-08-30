@@ -22,10 +22,16 @@ us_path='/home/skgudwn34/Accented_speech/speech_recognition/dataset/val_dataset/
 
 save_path='/home/skgudwn34/Accented_speech/speech_recognition/input_data/'
 
-###remove acute accents
+###remove diacritic
 def remove_accents(sentence):
-    nkfd_form = unicodedata.normalize('NFKD', sentence)
-    return u"".join([c for c in nkfd_form if not unicodedata.combining(c)])
+    if 'Ø' in sentence:
+        sentence = sentence.replace('Ø','O')
+
+    sentence = unicodedata.normalize('NFKD', sentence)
+    sentence = sentence.encode('ascii', 'ignore')
+    sentence = sentence.decode("utf-8")
+
+    return str(sentence)
 
 ###make dataset
 def make_dataset(data_path,csv_file):
