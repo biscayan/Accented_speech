@@ -6,43 +6,41 @@ import time
 from decoder import GreedyDecoder
 from error_rate import WER, CER
 
-
-###keeps track of total iterations
-class IterMeter(object):
-    def __init__(self):
-        self.val = 0
-
-    def step(self):
-        self.val += 1
-
-    def get(self):
-        return self.val
-
-
 ###training
-def Train(model, device, train_loader, val_loader, criterion, optimizer, epochs, iter_meter, experiment):
+def baseline_train(model, device, source_train_loader, target_train_loader, val_loader, criterion, optimizer, epochs, iter_meter, experiment):
     save_path='/home/skgudwn34/Accented_speech/speech_recognition/result/'
 
-    print("Train start")
+    print("Baseline train start")
 
     model.train()
 
-    train_loss_list=[]
-    x_step=[]
-
     with experiment.train():
         for epoch in range(epochs+1):
-            for train_idx, train_data in enumerate(train_loader):
-                train_spectrograms, train_labels, train_input_lengths, train_label_lengths = train_data
-                train_spectrograms, train_labels = train_spectrograms.to(device), train_labels.to(device)
+            for train_idx, (source_train, target_train) in enumerate(zip(source_train_loader,target_train_loader)):
 
                 optimizer.zero_grad()
 
-                train_output = model(train_spectrograms)  # (batch, time, n_class)
-                train_output = F.log_softmax(train_output, dim=2)
-                train_output = train_output.transpose(0, 1) # (time, batch, n_class)
+                ###source data
+                source_train_spectrograms, source_train_labels, source_train_input_lengths, source_train_label_lengths = source_train
+                source_train_spectrograms, source_train_labels = source_train_spectrograms.to(device), source_train_labels.to(device)
+            
+                source_train_output = model(source_train_spectrograms)  # (batch, time, n_class)
+                source_train_output = F.log_softmax(source_train_output, dim=2)
+                source_train_output = source_train_output.transpose(0, 1) # (time, batch, n_class)
 
-                train_loss = criterion(train_output, train_labels, train_input_lengths, train_label_lengths)
+                ###target data
+                target_train_spectrograms, target_train_labels, target_train_input_lengths, target_train_label_lengths = target_train
+                target_train_spectrograms, target_train_labels = target_train_spectrograms.to(device), target_train_labels.to(device)
+
+                target_train_output = model(target_train_spectrograms) # (batch, time, n_class)
+                target_train_output = F.log_softmax(target_train_output, dim=2)
+                target_train_output = target_train_output.transpose(0, 1) # (time, batch, n_class)
+                
+                ###loss
+                source_train_loss = criterion(source_train_output, source_train_labels, source_train_input_lengths, source_train_label_lengths)
+                target_train_loss = criterion(target_train_output, target_train_labels, target_train_input_lengths, target_train_label_lengths)
+                
+                train_loss = source_train_loss + target_train_loss
                 train_loss.backward()
 
                 experiment.log_metric('Train_loss', train_loss.item(), step=iter_meter.get())
@@ -83,26 +81,13 @@ def Train(model, device, train_loader, val_loader, criterion, optimizer, epochs,
 
             #scheduler.step(loss)
 
-            train_loss_list.append(train_loss)
-            x_step.append(epoch+1)
-
-        now = time.localtime()
-
-        plt.plot(x_step, train_loss_list, label = "Train Loss")
-        plt.xlabel('Epochs')
-        plt.title('LOSS')
-        plt.legend()
-        plt.savefig(save_path+'%04d_%02d_%02d_%02d_%02d_LOSS.png'%(now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min))
-        plt.show()
-        plt.clf()
-
 
 ###test
-def Test(model, device, test_loader, criterion, experiment):
+def baseline_test(model, device, test_loader, criterion, experiment):
     save_path='/home/skgudwn34/Accented_speech/speech_recognition/result/'
     now = time.localtime()
 
-    print("Test start")
+    print("Baseline test start")
     
     model.eval()
     

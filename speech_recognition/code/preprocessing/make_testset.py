@@ -14,11 +14,11 @@ ind_csv=open('/home/skgudwn34/Accented_speech/speech_recognition/csv/india_valid
 us_csv=open('/home/skgudwn34/Accented_speech/speech_recognition/csv/us_validated.csv','r',encoding='UTF8')
 
 ###data path
-aus_path='/home/skgudwn34/Accented_speech/speech_recognition/dataset/test_dataset/Australia/'
-can_path='/home/skgudwn34/Accented_speech/speech_recognition/dataset/test_dataset/Canada/'
-eng_path='/home/skgudwn34/Accented_speech/speech_recognition/dataset/test_dataset/England/'
-ind_path='/home/skgudwn34/Accented_speech/speech_recognition/dataset/test_dataset/India/'
-us_path='/home/skgudwn34/Accented_speech/speech_recognition/dataset/test_dataset/US/'
+aus_path='/home/skgudwn34/Accented_speech/speech_recognition/cv_datasetALL/test_dataset/Australia/'
+can_path='/home/skgudwn34/Accented_speech/speech_recognition/cv_datasetALL/test_dataset/Canada/'
+eng_path='/home/skgudwn34/Accented_speech/speech_recognition/cv_datasetALL/test_dataset/England/'
+ind_path='/home/skgudwn34/Accented_speech/speech_recognition/cv_datasetALL/test_dataset/India/'
+us_path='/home/skgudwn34/Accented_speech/speech_recognition/cv_datasetALL/test_dataset/US/'
 
 save_path='/home/skgudwn34/Accented_speech/speech_recognition/input_data/'
 
@@ -34,13 +34,9 @@ def remove_accents(sentence):
     return str(sentence)
 
 ###make dataset
-def make_dataset(data_path,csv_file):
+def make_aus_dataset(data_path,csv_file):
 
     aus_index=0
-    can_index=1000
-    eng_index=2000
-    ind_index=3000
-    us_index=4000
 
     ###Australia
     if data_path==aus_path and csv_file==aus_csv:
@@ -67,8 +63,12 @@ def make_dataset(data_path,csv_file):
 
         return aus_df
 
+def make_can_dataset(data_path,csv_file):
+
+    can_index=0
+
     ###Canada
-    elif data_path==can_path and csv_file==can_csv:
+    if data_path==can_path and csv_file==can_csv:
 
         file_list=[]
 
@@ -92,8 +92,12 @@ def make_dataset(data_path,csv_file):
 
         return can_df
 
+def make_eng_dataset(data_path,csv_file):
+
+    eng_index=0
+
     ###England
-    elif data_path==eng_path and csv_file==eng_csv:
+    if data_path==eng_path and csv_file==eng_csv:
 
         file_list=[]
 
@@ -117,8 +121,12 @@ def make_dataset(data_path,csv_file):
 
         return eng_df
 
+def make_ind_dataset(data_path,csv_file):
+
+    ind_index=0
+
     ###India
-    elif data_path==ind_path and csv_file==ind_csv:
+    if data_path==ind_path and csv_file==ind_csv:
 
         file_list=[]
 
@@ -142,9 +150,12 @@ def make_dataset(data_path,csv_file):
 
         return ind_df
 
-    ###US
-    elif data_path==us_path and csv_file==us_csv:
+def make_us_dataset(data_path,csv_file):
 
+    us_index=0
+
+    ###US
+    if data_path==us_path and csv_file==us_csv:
 
         file_list=[]
 
@@ -169,15 +180,17 @@ def make_dataset(data_path,csv_file):
         return us_df
 
 
-aus_test_df=make_dataset(aus_path,aus_csv)
-can_test_df=make_dataset(can_path,can_csv)
-eng_test_df=make_dataset(eng_path,eng_csv)
-ind_test_df=make_dataset(ind_path,ind_csv)
-us_test_df=make_dataset(us_path,us_csv)
+us_test_df=make_us_dataset(us_path,us_csv)
 
-test_df=pd.concat([aus_test_df,can_test_df,eng_test_df,ind_test_df,us_test_df])
+print(us_test_df)
+
+#test_df=pd.concat([aus_test_df,can_test_df,eng_test_df,ind_test_df,us_test_df])
+#print(test_df)
 
 ###data save
 
-test_df.to_pickle(save_path+'test_set') 
+us_test_df.to_pickle(save_path+'cv_us_testALL')
+print("save completed")
+
+#test_df.to_pickle(save_path+'test_set') 
 #test_df.to_csv(save_path+'test_set.csv',index=False)
