@@ -45,8 +45,8 @@ dataset for experiment
 - cv6_1_ind_vallim : 4000 files / 6 hours  
 
 5. US  
-- cv_us4_vallim : 2000 files / 2 hours  
-- cv_us6_1_vallim : 4000 files / 6 hours 
+- cv4_us_vallim : 2000 files / 2 hours  
+- cv6_1_us_vallim : 4000 files / 6 hours 
 
 ## Test set
 1. Australia  
@@ -66,5 +66,5 @@ dataset for experiment
 - cv6_1_ind_testlim : 4000 files / 6 hours  
 
 5. US  
-- cv_us4_testlim : 2000 files / 2 hours  
-- cv_us6_1_testlim : 4000 files / 6 hours 
+- cv4_us_testlim : 2000 files / 2 hours  
+- cv6_1_us_testlim : 4000 files / 6 hours 
