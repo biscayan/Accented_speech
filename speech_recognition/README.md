@@ -25,14 +25,14 @@
 
 1. Baseline model [코드 확인](https://github.com/biscayan/Accented_speech/blob/master/speech_recognition/code/experiment/asr_model.py#L70)
 
-<img src="https://user-images.githubusercontent.com/56914074/115953413-459a1c00-a526-11eb-97da-d8ff8b7be2e4.PNG" width="35%">
+<img src="https://user-images.githubusercontent.com/56914074/115953413-459a1c00-a526-11eb-97da-d8ff8b7be2e4.PNG" width="50%">
 
 </br>
 </br>
 
 2. DANN model [코드 확인](https://github.com/biscayan/Accented_speech/blob/master/speech_recognition/code/experiment/asr_model.py#L103)
 
-<img src="https://user-images.githubusercontent.com/56914074/115942643-34c9b600-a4e6-11eb-81eb-84a0f28e96f0.PNG" width="35%">
+<img src="https://user-images.githubusercontent.com/56914074/115942643-34c9b600-a4e6-11eb-81eb-84a0f28e96f0.PNG" width="50%">
 
 </br>
 </br>
