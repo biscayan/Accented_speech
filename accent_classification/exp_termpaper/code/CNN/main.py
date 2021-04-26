@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from data_manip import csv2data, csv2label
-from dataset import Accent_dataset
+from cv_dataset import Accent_dataset
 from model import CNN_model
 from torch.utils.data import DataLoader
 from train_test import Train, Test
@@ -29,14 +29,14 @@ def main(num_epochs, learning_rate, batch_size):
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
     val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
+    
+    ### model
+    cnn_model=CNN_model().to(device)
+    print(cnn_model)
 
     ### loss
     optimizer = optim.Adam(cnn_model.parameters(), lr=learning_rate)
     criterion = nn.CrossEntropyLoss()
-
-    ### model
-    cnn_model=CNN_model().to(device)
-    print(cnn_model)
 
     ### experiment
     Train(cnn_model, train_loader, val_loader, optimizer, criterion, device, num_epochs)

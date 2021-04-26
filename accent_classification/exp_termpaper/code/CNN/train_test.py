@@ -56,7 +56,6 @@ def Train(cnn_model, train_loader, val_loader, optimizer, criterion, device, num
             print('Epoch: {:4d}/{} | Train loss: {:.6f}'.format(epoch, num_epochs, tain_loss / 100))
             print("Epoch: {:4d}/{} | Validation loss: {:.6f}".format(epoch, num_epochs, val_loss / total))
             print('[Validation set] ERR: %f | ACC: %f (%d / %d)' % (1 - (correct / total), correct / total, correct, total))
-            print(optimizer.param_groups[0]['lr'])
             print()
             
         train_loss_list.append(tain_loss/100)
