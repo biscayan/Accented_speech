@@ -42,23 +42,41 @@ input data의 억양이 무엇인지 분류를 해낼 수 있다면, 억양정�
 
 #### 데이터셋
 
-|Dataset|Accent|Number of files|
-|:---:|:---:|:---:|
-|Training set|AU|3000|
-|Training set|CA|3000|
-|Training set|EN|3000|
-|Training set|IN|3000|
-|Training set|US|3000|
-|Dev set|AU|1000|
-|Dev set|CA|1000|
-|Dev set|EN|1000|
-|Dev set|IN|1000|
-|Dev set|US|1000|
-|Test set|AU|1000|
-|Test set|CA|1000|
-|Test set|EN|1000|
-|Test set|IN|1000|
-|Test set|US|1000|
+1. Training set
+
+    |Dataset|Region|Files|
+    |:---:|:---:|:---:|
+    |AU-train|Australia|3,000|
+    |CA-train|Canada|3,000|
+    |EN-train|England|3,000|
+    |IN-train|India|3,000|
+    |US-traint|US|3,000|
+
+</br>
+
+2. Development set
+
+    |Dataset|Region|Files|
+    |:---:|:---:|:---:|
+    |AU-dev|Australia|1,000|
+    |CA-dev|Canada|1,000|
+    |EN-dev|England|1,000|
+    |IN-dev|India|1,000|
+    |US-dev|US|1,000|
+
+</br>
+
+3. Test set
+
+    |Dataset|Region|Files|
+    |:---:|:---:|:---:|
+    |AU-test|Australia|1,000|
+    |CA-test|Canada|1,000|
+    |EN-test|England|1,000|
+    |IN-test|India|1,000|
+    |US-test|US|1,000|
+
+</br>
 
 ---
 
