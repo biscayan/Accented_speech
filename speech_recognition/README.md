@@ -4,15 +4,16 @@ CTC와 DANN을 이용하여 accented speech recognition의 성능 개선
 <br/>
 
 ## 연구의 목적
-지난 수십년 간 컴퓨터 기술이 많이 발전하였으며 특히 딥러닝의 부흥은 음성인식기술의 비약적인 발전을 불러일으켰다.  
-이러한 발전에도 불구하고 감정, 억양, 소음 등이 섞인 특정 발화에 대해서는 좋은 성능을 보이지 못하는 것이 음성인식기술의 현 주소이다.  
-따라서 본 연구에서는 그 중에서도 억양이 섞인 발화에 대해 성능을 높이고자 하였다.  
+지난 수십 년 간 컴퓨터 기술이 많이 발전하였으며 특히 딥러닝의 부흥은 음성인식기술의 비약적인 발전을 불러일으켰습니다.  
+이러한 발전에도 불구하고 감정, 억양, 소음 등이 섞인 특정 발화에 대해서는 좋은 성능을 보이지 못하고 있습니다.  
+그중에서도 억양이 섞인 발화는 표준 발화와 비교했을 때 언어학적인 차이가 존재하여 제대로 인식을 하기가 어렵습니다.  
+따라서 본 연구에서는 CTC와 DANN을 적용하여 억양음성인식의 성능을 높였습니다.  
 
 <br/>
 
 ## 연구 기간
 
-- 석사학위 논문 주제로 연구를 진행하였다.
+- 석사학위 논문 주제로 연구를 진행하였습니다.  
 - 연구 기간 : 2020.04 ~ 2021.04
 
 <br/>
@@ -28,26 +29,31 @@ CTC와 DANN을 이용하여 accented speech recognition의 성능 개선
 ## 적용한 기법
 
 **1. Domain Adversarial Neural Network (DANN)**
-- DANN은 domain adaptation 기법 중에 하나로 source domain과 target domain이 적대적으로 학습이 되면서 성능향상이 일어나는 모델이다.  
-- DANN은 input data의 도메인을 잘 구별하지 못하게 하면서 source domain과 target domain의 특성의 차이를 줄이는 것을 목표로 한다.  
-- DANN은 다음과 같이 3개의 sub-network들로 이루어져있다.  
+- DANN은 domain adaptation 기법의 하나로 source domain data와 target domain data가 적대적으로 학습이 됩니다. 
+- 즉, DANN은 input data의 도메인을 잘 구별하지 못하게 하면서 source domain data와 target domain data의 특성의 차이를 줄이는 것을 목표로 합니다.  
+- DANN은 다음과 같이 3개의 sub-network들로 이루어져 있습니다.  
 
-    (1) Feature extractor : feature extractor는 input data에서 모델을 학습시키기 위해 유용한 추상적인 특징들을 추출한다.  
-    추출된 특징들은 다음 단계의 sub-network들인 domain classifier와 label predictor에 동시에 전달이 된다.  
+    (1) **Feature extractor** 
+    - Feature extractor는 input data에서 모델 학습에 유용한 추상적인 특징들을 추출합니다.  
+    - 추출된 특징은 다음 단계의 sub-network들인 domain classifier와 label predictor에 동시에 전달이 됩니다.  
 
-    (2) Domain classifier : domain classifier는 input data의 domain을 구별한다.  
-        DANN이 source domain과 target domain의 특성의 차이를 줄이는 것을 목표로 하기 때문에 domain classifier는 input data의 domain을 올바르게 구별하지 않아야 한다.  
-        이는 domain classifier의 최하단에 위치한 Gradient Reversal Layer (GRL)를 통해서 실현이 가능하다. GRL은 DANN에서 핵심적인 역할을 수행한다.   
-        GRL은 back-propagation과정에서 domain classifier의 손실값을 반전시켜서 전달을한다. 따라서 다음학습 시에 feature extractor가 domain-invariant한 특징을 만들어 낼 수 있도록 도와준다.  
+    (2) **Domain classifier** 
+    - Domain classifier는 input data의 domain을 구별합니다.  
+    - DANN이 source domain data와 target domain data의 특성의 차이를 줄이는 것을 목표로 하기 때문에 domain classifier는 input data의 domain을 올바르게 구별하지 않도록 해야 합니다.  
+    - Domain classifier의 최하단에 위치한 Gradient Reversal Layer(GRL)는 DANN에서 핵심적인 역할을 수행합니다.   
+    - GRL은 back-propagation 과정에서 domain loss를 반전시켜서 feature extractor로 전달합니다. 따라서 다음 학습 시에 feature extractor가 domain-invariant한 특징을 만들어 낼 수 있도록 도와줍니다.  
+    - GRL은 back-propagation 과정에서만 활성화되며 forward-propagation 중에는 파라미터값을 변경하지 않습니다.   
 
-    (3) Label predictor : label predictor는 input data의 label을 예측한다. 본 연구에서는 영어 알파벳 A ~ Z, space, apostrophe까지 총 28개의 label 중에서 예측을 한다.  
+    (3) **Label predictor** 
+    - Label predictor는 input data의 label을 예측합니다.  
+    - 본 연구에서는 영어 알파벳 A ~ Z, space, apostrophe까지 총 28가지 중에서 label을 예측합니다.  
 
 <br/>
 
 **2. Connectionist Temporal Classification (CTC)**
-- CTC는 end-to-end speech recognition 분야에서 LAS와 쌍벽을 이루는 중요한 모델이다.  
-- CTC는 input data와 label을 자동으로 매치하기 때문에 데이터를 pre-segment할 필요가 없다.  
-- CTC는 결과 label을 바로 얻을 수 있으므로 후처리 작업이 필요없고 음성인식과정을 간편화시키기 때문에 매우 유용하다. 
+- CTC는 end-to-end speech recognition 분야에서 LAS와 쌍벽을 이루는 중요한 모델입니다.  
+- CTC는 input data와 label을 자동으로 매치하기 때문에 데이터를 pre-segment 할 필요가 없습니다.  
+- CTC는 결과 label을 바로 얻을 수 있기 때문에 후처리 작업이 필요 없고 음성인식 과정을 간편화시켜 매우 유용합니다.  
 
 <br/>
 
@@ -69,16 +75,19 @@ CTC와 DANN을 이용하여 accented speech recognition의 성능 개선
 
 ## 실험세팅
 ### 코퍼스
-- Mozilla의 [Common voice](https://commonvoice.mozilla.org/ko) 6.1버전을 사용하였다.
-    - Common Voice는 60개 언어의 음성데이터를 오픈소스로 제공한다.  
-    - Common Voice의 참여자들은 음성파일을 제공할 때 그들의 억양을 같이 알려주기 때문에 억양음성인식에서 유용하게 사용될 수 있다.  
+- 실험을 위해서 Mozilla의 [Common voice](https://commonvoice.mozilla.org/ko) 6.1 버전을 사용하였습니다.  
+- Common Voice는 60개 언어에 대해서 막대한 양의 검증된 음성데이터를 오픈소스로 제공합니다.  
+- Common Voice의 참여자들은 음성파일을 제공할 때 그들의 억양을 같이 알려주기 때문에 억양음성인식에서 유용하게 사용될 수 있습니다.  
 
 #### 억양
-- 실험을 위하여 5개의 Engliah accent가 사용되었다.  
+- 본 연구에서는 accented speech recognition 실험을 위해서 5개의 English accent가 사용되었습니다.  
+- 5개의 English accent는 source domain과 target domain으로 나누어졌습니다.
     - Source domain : US accent (US)  
     - Target domain : Australia accent (AU), Canada accent (CA), England accent(EN), India accent (IN)
 
 #### 데이터셋
+
+- 실험에 사용된 데이터셋은 아래와 같습니다.  
 
 1. Training set
 
@@ -121,28 +130,26 @@ CTC와 DANN을 이용하여 accented speech recognition의 성능 개선
 
 </br>
 
----
-
 ### 전처리
 
-- 코퍼스를 다운받았을 때, 모든 음성파일들이 mp3포맷을 가지고 있었다. 실험을 유연하게 진행하기 위하여 Goldwave를 사용하여 모든 음성파일들을 wav포맷으로 바꾸었으며 포맷을 바꿀 때 모든 파일들은 16,000HZ에 모노타입으로 인코딩되었다.
-- 코퍼스의 transcript파일에서 실험에 필요한 정보들만을 추출하여 새로운 csv파일로 만들어 실험에 사용하였다.
+- 코퍼스를 다운받았을 때, 모든 음성파일이 mp3포맷을 가지고 있었습니다. Goldwave를 사용하여 모든 음성파일을 wav포맷으로 바꾸었고 16,000HZ에 모노 타입으로 인코딩하였습니다.
+- 코퍼스의 transcript파일에서 실험에 필요한 정보들만을 추출하여 새로운 csv파일로 만들어 실험에 사용하였습니다.
 
----
+</br>
 
 ### 특징추출
-pyaudio를 사용하여 128 size의 mel-spectrogram들을 추출하여 input feature로 사용하였다.
+- pytorch의 torchaudio 라이브러리를 이용해서 128 size의 mel-spectrogram들을 추출하였고 input feature로 사용하였습니다.  
 
 </br>
 
 ## 실험결과
-실험결과는 Character Error Rate (CER)과 Word Error Rate (WER) 두 개의 metric을 이용하여 성능을 평가하였다.
-각각의 표에서 실험결과는 CER/WER의 쌍으로 기재되어있다.
+- 실험결과는 Character Error Rate(CER)와 Word Error Rate(WER) 두 개의 metric을 이용하여 성능을 평가하였습니다.  
+- 각각의 표에서 실험결과는 CER/WER의 쌍으로 기재되어있습니다.
 
-1. Baseline 모델과 DANN 모델의 실험결과 비교  
+1. Baseline 모델과 DANN 모델의 실험결과를 비교  
     - Baseline-src : 16만 개의 source domain data로만 학습시킨 baseline 모델  
-    - Baseline-src-tgt : 16만 개의 source domain data와 2만 개의 각각의 target domain data로 학습시킨 baseline 모델  
-    - DANN-base : 16만 개의 source domain data와 2만 개의 각각의 target domain data로 학습시킨 DANN 모델  
+    - Baseline-src-tgt : 16만 개의 source domain data와 2만 개의 target domain data로 학습시킨 baseline 모델  
+    - DANN-base : 16만 개의 source domain data와 2만 개의 target domain data로 학습시킨 DANN 모델  
 
         |Accent|Baseline-src|Baseline-src-tgt|DANN-base|
         |:---:|:---:|:---:|:---:|
@@ -154,9 +161,9 @@ pyaudio를 사용하여 128 size의 mel-spectrogram들을 추출하여 input fea
 </br>
 
 2. 기존의 DANN 모델과 target domain data의 양을 증가시킨 DANN 모델과의 실험결과를 비교  
-    - DANN-base : 16만 개의 source domain data와 2만 개의 각각의 target domain data로 학습시킨 DANN 모델  
+    - DANN-base : 16만 개의 source domain data와 2만 개의 target domain data로 학습시킨 DANN 모델  
     - DANN-inc : 16만 개의 source domain data와 target domain data를 추가하여 학습시킨 DANN 모델  
-    (AU->3만 7천 개 CA->3만 2천 개 EN->4만 개 IN->4만 개)  
+    총 target domain data의 수 : AU->3만 7천 개, CA->3만 2천 개, EN->4만 개, IN->4만 개  
 
         |Accent|DANN-base|DANN-inc|
         |:---:|:---:|:---:|
@@ -181,19 +188,18 @@ pyaudio를 사용하여 128 size의 mel-spectrogram들을 추출하여 input fea
 </br>
 
 ### 실험결과 분석
-Baseline 모델과 비교했을 때 모든 accent의 DANN 모델에서 성능향상이 일어났으므로 Domain Adversarial Training (DAT)이 source domain data와 target domain data의 차이를 효과적으로 줄일 수 있음이 증명되었다.  
-하지만 accent마나 성능향상 정도의 차이는 존재했는데 CA accent에서는 성능향상이 미미했고 EN, IN accent에서는 성능향상이 크게 일어났다.  
-이는 EN, IN accent가 source domain data로 사용된 US accent와 언어학적으로 큰 차이가 있는 반면 CA accent는 US accent와 언어학적으로 비슷하기 때문에 발생한 차이로 보인다.  
-target domain data의 양에 따른 성능향상을 확인하기 위하여 추가실험들도 진행을 봤는데 target domain data가 추가될수록 성능향상도 꾸준히 일어남이 확인되었다.  
+- Baseline 모델과 DANN 모델을 비교했을 때, 모든 accent의 DANN 모델에서 성능향상이 일어났으므로 Domain Adversarial Training(DAT)이 source domain data와 target domain data의 차이를 효과적으로 줄였음을 확인하였습니다.  
+- 하지만 accent마다 성능향상 정도의 차이는 존재했는데 CA accent에서는 성능향상이 미미했고 EN, IN accent에서는 성능향상이 크게 일어났습니다.  
+- EN, IN accent가 source domain data로 사용된 US accent와는 언어학적으로 큰 차이가 있는 반면에 CA accent는 US accent와 언어학적으로 비슷하기 때문에 성능향상 정도의 차이가 발생하였습니다.  
+- target domain data의 양에 따른 성능향상을 확인하기 위하여 추가실험들도 진행하였는데 target domain data가 추가될수록 성능향상이 꾸준히 일어났음을 확인하였습니다.  
 
 </br>
 
 ## 문제 해결
 - Out Of Memory (OOM)  
-실험에 사용되는 데이터의 양이 많아짐에 따라 OOM 문제가 밣생하고 더 이상 실험이 진행되지가 않았다.  
+실험에 사용되는 데이터의 양이 많아짐에 따라 OOM 문제가 발생하였고 더 이상 실험이 진행되지 않았습니다.  
 
-    (1) 우선, GPU 메모리 부족 문제는 병렬처리를 통하여 해결하였다. 하지만, 연구소에서 다른 인원들도 GPU를 사용해야 하고 최대로 사용할 수 있는 GPU 메모리의 양은 한정되어 있기 때문에 연구소 인원들과 사용할 GPU의 번호를 정하여 원활히 실험을 진행할 수 있었다.  
+    (1) 우선, GPU 메모리 부족 문제는 병렬처리를 통하여 해결하였습니다. 하지만, 연구소에서 다른 인원들도 GPU를 사용해야 하고 최대로 사용할 수 있는 GPU 메모리의 양은 한정되어 있어서 연구소 인원들과 상의 후 사용할 GPU의 번호를 지정하여 원활히 실험을 진행할 수 있었습니다.  
 
-    (2) 그 다음으로 CPU ram에서도 메모리 부족 문제가 발생하였다. 연구소에서 사용할 수 있는 ram의 용량은 130G정도로 많은 양을 사용할 수 있음에도 불구하고 메모리 부족 문제가 발생하여 의아했었다.  
-    garbage collect, delete를 통한 메모리 삭제 등 여러 시도를 해보았지만 여전히 문제가 해결되지는 않았다.  
-    몇일동안 고심을 하던 와중에 dataset을 작성한 코드를 천천히 살펴보았고 메모리 누수가 발생하는 것을 알게되었다. 따라서 dataset [코드 확인](https://github.com/biscayan/Accented_speech/blob/master/speech_recognition/code/experiment/cv_dataset.py) 을 수정하고 정상적으로 실험을 진핼할 수 있었다.  
+    (2) 그다음으로 CPU ram에서도 메모리 부족 문제가 발생하였습니다. 연구소에서 사용할 수 있는 ram의 총 용량은 130G 정도로 많은 양임에도 불구하고 메모리 부족 문제가 발생하여 의아했습니다. garbage collect, delete 등 여러 시도를 해보았지만, 여전히 문제가 해결되지 않았습니다.  
+    몇 일 동안 고심을 하던 와중에 dataset을 작성한 코드를 천천히 살펴보았고 데이터프레임을 읽어올 때 메모리 누수가 발생하는 것을 알게 되었습니다. 따라서 dataset 코드를 [코드 확인](https://github.com/biscayan/Accented_speech/blob/master/speech_recognition/code/experiment/cv_dataset.py) 수정하고 정상적으로 실험을 진행할 수 있었습니다.  
