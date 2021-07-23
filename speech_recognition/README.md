@@ -32,7 +32,7 @@ CTC와 DANN을 이용하여 accented speech recognition의 성능 개선
 ## 적용한 기법
 
 **1. Domain Adversarial Neural Network (DANN)**
-- DANN은 domain adaptation 기법의 하나로 source domain data와 target domain data가 적대적으로 학습이 됩니다. 
+- DANN은 domain adaptation 기법의 하나로 source domain data와 target domain data가 적대적으로 학습이 되면서 target domain data에 대한 성능을 높입니다.  
 - 즉, DANN은 input data의 도메인을 잘 구별하지 못하게 하면서 source domain data와 target domain data의 특성의 차이를 줄이는 것을 목표로 합니다.  
 - DANN은 다음과 같이 3개의 sub-network들로 이루어져 있습니다.  
 
@@ -55,38 +55,45 @@ CTC와 DANN을 이용하여 accented speech recognition의 성능 개선
 
 **2. Connectionist Temporal Classification (CTC)**
 - CTC는 end-to-end speech recognition 분야에서 LAS와 쌍벽을 이루는 중요한 모델입니다.  
-- CTC는 input data와 label을 자동으로 매치하기 때문에 데이터를 pre-segment 할 필요가 없습니다.  
+- CTC는 input data와 output label을 자동으로 맵핑하기 때문에 데이터를 pre-segment 할 필요가 없습니다.  
 - CTC는 결과 label을 바로 얻을 수 있기 때문에 후처리 작업이 필요 없고 음성인식 과정을 간편화시켜 매우 유용합니다.  
 
 <br/>
 
 ## 모델
 
-1. Baseline model [코드 확인](https://github.com/biscayan/Accented_speech/blob/master/speech_recognition/code/experiment/asr_model.py#L70)
+1. Baseline model [코드 확인](https://github.com/biscayan/Accented_speech/blob/master/speech_recognition/code/experiment/asr_model.py#L67)
+    - Baseline model은 4개의 CNN layer와 4개의 BiGRU layer로 구성되어 있고 일반적인 end-to-end speech recognition을 수행합니다.
 
-<img src="https://user-images.githubusercontent.com/56914074/115953413-459a1c00-a526-11eb-97da-d8ff8b7be2e4.PNG" width="50%">
+    <br/>
 
-</br>
-</br>
+    <img src="https://user-images.githubusercontent.com/56914074/115953413-459a1c00-a526-11eb-97da-d8ff8b7be2e4.PNG" width="50%">
 
-2. DANN model [코드 확인](https://github.com/biscayan/Accented_speech/blob/master/speech_recognition/code/experiment/asr_model.py#L103)
+    </br>
+    </br>
 
-<img src="https://user-images.githubusercontent.com/56914074/115942643-34c9b600-a4e6-11eb-81eb-84a0f28e96f0.PNG" width="50%">
+2. DANN model [코드 확인](https://github.com/biscayan/Accented_speech/blob/master/speech_recognition/code/experiment/asr_model.py#L99)
+    - DANN model의 sub-network들은 서로 다른 기능을 수행하기 때문에 neural network의 특성을 고려하여 sub-network를 구축하였습니다.
+    - 따라서, feature extractor는 4개의 CNN layer로, domain classifier는 4개의 DNN layer로, 그리고 label predictor는 4개의 BiGRU layer로 구성하였습니다.
 
-</br>
-</br>
+    <br/>
+
+    <img src="https://user-images.githubusercontent.com/56914074/115942643-34c9b600-a4e6-11eb-81eb-84a0f28e96f0.PNG" width="50%">
+
+    </br>
+    </br>
 
 ## 실험세팅
 ### 코퍼스
-- 실험을 위해서 Mozilla의 [Common voice](https://commonvoice.mozilla.org/ko) 6.1 버전을 사용하였습니다.  
+- 실험데이터로 Mozilla의 [Common voice](https://commonvoice.mozilla.org/ko) 6.1 버전을 사용하였습니다.  
 - Common Voice는 60개 언어에 대해서 막대한 양의 검증된 음성데이터를 오픈소스로 제공합니다.  
 - Common Voice의 참여자들은 음성파일을 제공할 때 그들의 억양을 같이 알려주기 때문에 억양음성인식에서 유용하게 사용될 수 있습니다.  
 
 #### 억양
 - 본 연구에서는 accented speech recognition 실험을 위해서 5개의 English accent가 사용되었습니다.  
-- 5개의 English accent는 source domain과 target domain으로 나누어졌습니다.
+- Domain adaptation을 위하여 5개의 English accent는 source domain과 target domain으로 나누어졌습니다.
     - Source domain : US accent (US)  
-    - Target domain : Australia accent (AU), Canada accent (CA), England accent(EN), India accent (IN)
+    - Target domain : Australian accent (AU), Canadian accent (CA), British English (England) accent (EN), Indian accent (IN)
 
 #### 데이터셋
 
@@ -111,14 +118,14 @@ CTC와 DANN을 이용하여 accented speech recognition의 성능 개선
 
 </br>
 
-2. Development set
+2. Validation set
 
     |Dataset|Region|Files|Hours|
     |:---:|:---:|:---:|:---:|
-    |AU-dev|Australia|2,000|3|
-    |CA-dev|Canada|2,000|3|
-    |EN-dev|England|2,000|3|
-    |IN-dev|India|2,000|3|
+    |AU-val|Australia|2,000|3|
+    |CA-val|Canada|2,000|3|
+    |EN-val|England|2,000|3|
+    |IN-val|India|2,000|3|
 
 </br>
 
@@ -152,9 +159,9 @@ CTC와 DANN을 이용하여 accented speech recognition의 성능 개선
 1. Baseline 모델과 DANN 모델의 실험결과를 비교  
     - Baseline-src : 16만 개의 source domain data로만 학습시킨 baseline 모델  
     - Baseline-src-tgt : 16만 개의 source domain data와 2만 개의 target domain data로 학습시킨 baseline 모델  
-    - DANN-base : 16만 개의 source domain data와 2만 개의 target domain data로 학습시킨 DANN 모델  
+    - DANN : 16만 개의 source domain data와 2만 개의 target domain data로 학습시킨 DANN 모델  
 
-        |Accent|Baseline-src|Baseline-src-tgt|DANN-base|
+        |Accent|Baseline-src|Baseline-src-tgt|DANN|
         |:---:|:---:|:---:|:---:|
         |AU|28.85% / 65.95%|25.09% / 61.06%|**24.22% / 59.80%**|
         |CA|14.76% / 43.16%|13.77% / 40.68%|**13.55% / 40.15%**|
@@ -164,11 +171,11 @@ CTC와 DANN을 이용하여 accented speech recognition의 성능 개선
 </br>
 
 2. 기존의 DANN 모델과 target domain data의 양을 증가시킨 DANN 모델과의 실험결과를 비교  
-    - DANN-base : 16만 개의 source domain data와 2만 개의 target domain data로 학습시킨 DANN 모델  
+    - DANN : 16만 개의 source domain data와 2만 개의 target domain data로 학습시킨 DANN 모델  
     - DANN-inc : 16만 개의 source domain data와 target domain data를 추가하여 학습시킨 DANN 모델  
     총 target domain data의 수 : AU->3만 7천 개, CA->3만 2천 개, EN->4만 개, IN->4만 개  
 
-        |Accent|DANN-base|DANN-inc|
+        |Accent|DANN|DANN-inc|
         |:---:|:---:|:---:|
         |AU|24.22% / 59.80%|**22.72% / 57.38%**|
         |CA|13.55% / 40.15%|**13.63% / 40.02%**|
@@ -191,7 +198,7 @@ CTC와 DANN을 이용하여 accented speech recognition의 성능 개선
 </br>
 
 ### 실험결과 분석
-- Baseline 모델과 DANN 모델을 비교했을 때, 모든 accent의 DANN 모델에서 성능향상이 일어났으므로 Domain Adversarial Training(DAT)이 source domain data와 target domain data의 차이를 효과적으로 줄였음을 확인하였습니다.  
+- Baseline 모델과 DANN 모델을 비교했을 때, 모든 accent의 DANN 모델에서 성능향상이 일어났으므로 Domain Adversarial Training(DAT)이 source domain data와 target domain data의 특성의 차이를 효과적으로 줄였음을 확인하였습니다.  
 - 하지만 accent마다 성능향상 정도의 차이는 존재했는데 CA accent에서는 성능향상이 미미했고 EN, IN accent에서는 성능향상이 크게 일어났습니다.  
 - EN, IN accent가 source domain data로 사용된 US accent와는 언어학적으로 큰 차이가 있는 반면에 CA accent는 US accent와 언어학적으로 비슷하기 때문에 성능향상 정도의 차이가 발생하였습니다.  
 - target domain data의 양에 따른 성능향상을 확인하기 위하여 추가실험들도 진행하였는데 target domain data가 추가될수록 성능향상이 꾸준히 일어났음을 확인하였습니다.  
