@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Function
 
-###Gradient Reverse Layer
+# Gradient Reverse Layer
 class GRL(Function):
     @staticmethod
     def forward(ctx, x, alpha):
@@ -15,7 +15,7 @@ class GRL(Function):
         grad_output = grad_output.neg() * ctx.alpha
         return grad_output, None
 
-###Layer normalization built for cnns input
+# Layer normalization for cnn input
 class CNNLayerNorm(nn.Module):
     def __init__(self, n_feats):
         super(CNNLayerNorm, self).__init__()
@@ -28,8 +28,7 @@ class CNNLayerNorm(nn.Module):
 
         return x.transpose(2, 3).contiguous() # (batch, channel, feature, time) 
 
-
-###CNN
+# CNN
 class VanillaCNN(nn.Module):
     def __init__(self, in_channels, out_channels, kernel, stride, dropout, n_feats):
         super(VanillaCNN, self).__init__()
@@ -46,8 +45,7 @@ class VanillaCNN(nn.Module):
         
         return x # (batch, channel, feature, time)
 
-
-###BiGRU
+# BiGRU
 class BidirectionalGRU(nn.Module):
     def __init__(self, rnn_dim, hidden_size, dropout, batch_first):
         super(BidirectionalGRU, self).__init__()
@@ -65,8 +63,7 @@ class BidirectionalGRU(nn.Module):
         
         return x
 
-
-###baseline
+# baseline model
 class Baseline(nn.Module):
     def __init__(self, n_cnn_layers, n_rnn_layers, rnn_dim, n_feats):
         super(Baseline, self).__init__()
@@ -98,8 +95,7 @@ class Baseline(nn.Module):
 
         return x
 
-
-###DANN
+# DANN model
 class DANN(nn.Module):
     def __init__(self, n_cnn_layers, n_rnn_layers, rnn_dim, n_feats):
         super(DANN, self).__init__()
@@ -121,7 +117,6 @@ class DANN(nn.Module):
             nn.Linear(rnn_dim, rnn_dim), nn.LayerNorm(rnn_dim), nn.GELU(), nn.Dropout(0.1),
             nn.Linear(rnn_dim, rnn_dim), nn.LayerNorm(rnn_dim), nn.GELU(), nn.Dropout(0.1), 
             nn.Linear(rnn_dim, 2))
-
 
     def forward(self, x, alpha, mode):
         

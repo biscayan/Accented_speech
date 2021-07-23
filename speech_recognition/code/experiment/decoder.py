@@ -1,14 +1,12 @@
 import torch
 from text_transform import TextTransform
 
-###decoder
-
+# decoder
 def GreedyDecoder(output, labels, label_lengths, blank_label=28, collapse_repeated=True):
 
     arg_maxes = torch.argmax(output, dim=2)
 
-    decodes = []
-    targets = []
+    decodes, targets = [], []
 
     text_transform = TextTransform()
 

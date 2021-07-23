@@ -1,12 +1,12 @@
 import numpy as np
 
-###edit distance
+# edit distance
 def levenshtein_distance(ref, hyp):
     
-    m = len(ref) #reference
-    n = len(hyp) #hypothesis
+    m = len(ref) # reference
+    n = len(hyp) # hypothesis
 
-    #special case
+    # special case
     if ref == hyp:
         return 0
     if m == 0:
@@ -18,14 +18,14 @@ def levenshtein_distance(ref, hyp):
         ref, hyp = hyp, ref
         m, n = n, m
 
-    #use 0 (min(m,n)) space
+    # use 0 (min(m,n)) space
     distance = np.zeros((2, n+1), dtype=np.int32)
 
-    #initialize distance matrix
+    # initialize distance matrix
     for j in range(0, n+1):
         distance[0][j] = j
 
-    #calculate levenshtein distance
+    # calculate levenshtein distance
     for i in range(1, m+1):
 
         prev_row_idx = (i-1)%2
@@ -45,7 +45,6 @@ def levenshtein_distance(ref, hyp):
 
     return distance[m%2][n]
 
-
 def word_errors(reference, hypothesis, ignore_case=False, delimiter=' '):
     if ignore_case == True:
         reference = reference.upper()
@@ -57,7 +56,6 @@ def word_errors(reference, hypothesis, ignore_case=False, delimiter=' '):
     edit_distance = levenshtein_distance(ref_words, hyp_words)
 
     return float(edit_distance), len(ref_words)
-
 
 def char_errors(reference, hypothesis, ignore_case=False, delimiter=' ', remove_space=False):
     if ignore_case == True:
@@ -76,7 +74,7 @@ def char_errors(reference, hypothesis, ignore_case=False, delimiter=' ', remove_
 
     return float(edit_distance), len(reference)
 
-###word error rate
+# word error rate
 '''
 WER = (Sw + Dw + Iw) / Nw
 
@@ -97,7 +95,7 @@ def WER(reference, hypothesis, ignore_case=False, delimiter=' '):
 
     return wer
 
-###character error rate
+# character error rate
 '''
 CER = (Sc + Dc + Ic) / Nc
 

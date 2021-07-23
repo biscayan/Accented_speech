@@ -1,4 +1,4 @@
-###keeps track of total iterations
+# keeps track of total iterations
 class IterMeter(object):
     def __init__(self):
         self.val = 0

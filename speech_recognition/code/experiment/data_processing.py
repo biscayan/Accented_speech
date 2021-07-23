@@ -3,20 +3,18 @@ import torchaudio
 import torch.nn as nn
 from text_transform import TextTransform
 
-
-###data processing
+# data processing
 def DataProcessing(data,data_type):
 
-    ###spec augmentation
-
-    #for trainset
+    # spec augmentation
+    # for trainset
     train_audio_transforms = nn.Sequential(
         torchaudio.transforms.MelSpectrogram(sample_rate=16000, n_mels=128),
         torchaudio.transforms.FrequencyMasking(freq_mask_param=30),
         torchaudio.transforms.TimeMasking(time_mask_param=100)
     )
 
-    #for testset
+    # for testset
     test_audio_transforms = torchaudio.transforms.MelSpectrogram()
 
     text_transform = TextTransform()

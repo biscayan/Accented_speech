@@ -1,11 +1,10 @@
 '''
 The outputs of the network are the graphemes of each language. 
 At each output time-step t, the RNN makes a prediction over characters.
-In English we have `t ∈ {a, b, c, . . . , z,space, apostrophe, blank}
+In English, we have `t ∈ {a, b, c, . . . , z,space, apostrophe, blank}
 '''
 
-###maps characters to integers and vice versa
-
+# maps characters to integers and vice versa
 class TextTransform:
     def __init__(self):
         char_map_str="""
@@ -49,7 +48,7 @@ class TextTransform:
         
         self.index_map[1] = ' '
 
-    #Use a character map and convert text to an integer sequence
+    # Use a character map and convert text to an integer sequence
     def text_to_int(self, text):
 
         int_sequence = []
@@ -64,7 +63,7 @@ class TextTransform:
         
         return int_sequence
 
-    #Use a character map and convert integer labels to an text sequence
+    # Use a character map and convert integer labels to an text sequence
     def int_to_text(self, labels):
 
         string = []

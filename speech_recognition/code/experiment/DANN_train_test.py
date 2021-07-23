@@ -9,7 +9,7 @@ from  itertools import zip_longest, cycle
 from decoder import GreedyDecoder
 from error_rate import WER, CER
 
-###training
+# training
 def DANN_train(model, device, source_train_loader, target_train_loader, val_loader, label_criterion, domain_criterion, optimizer, epochs, alpha, iter_meter, experiment):
     
     save_path='/home/skgudwn34/Accented_speech/speech_recognition/result/'
@@ -24,7 +24,7 @@ def DANN_train(model, device, source_train_loader, target_train_loader, val_load
 
                 optimizer.zero_grad()
                 
-                ###source data
+                # source data
                 source_train_spectrograms, source_train_labels, source_train_input_lengths, source_train_label_lengths = source_train
                 source_train_spectrograms, source_train_labels = source_train_spectrograms.to(device), source_train_labels.to(device)
 
@@ -33,15 +33,14 @@ def DANN_train(model, device, source_train_loader, target_train_loader, val_load
                 source_train_output = F.log_softmax(source_train_output, dim=2)
                 source_train_output = source_train_output.transpose(0, 1) # (time, batch, n_class)
 
-                #source_domain_output = source_domain_output.view(-1, source_domain_output.shape[2]).to(device)
                 source_domain_output = source_domain_output.view(source_domain_output.shape[0],source_domain_output.shape[2], source_domain_output.shape[1]).to(device)
                 source_domain_label = torch.zeros(source_domain_output.shape[0],source_domain_output.shape[2]).type(torch.LongTensor).to(device)
 
-                ###source loss
+                # source loss
                 source_train_label_loss = label_criterion(source_train_output, source_train_labels, source_train_input_lengths, source_train_label_lengths)
                 source_train_domain_loss = domain_criterion(source_domain_output, source_domain_label) #input([B,C]), target([B])
 
-                ###target data
+                # target data
                 if target_train != None:
                     target_train_spectrograms, target_train_labels, target_train_input_lengths, target_train_label_lengths = target_train
                     target_train_spectrograms, target_train_labels = target_train_spectrograms.to(device), target_train_labels.to(device)
@@ -51,11 +50,10 @@ def DANN_train(model, device, source_train_loader, target_train_loader, val_load
                     target_train_output = F.log_softmax(target_train_output, dim=2)
                     target_train_output = target_train_output.transpose(0, 1) # (time, batch, n_class)
 
-                    #target_domain_output = target_domain_output.view(-1, target_domain_output.shape[2]).to(device)
                     target_domain_output = target_domain_output.view(target_domain_output.shape[0],target_domain_output.shape[2], target_domain_output.shape[1]).to(device)
                     target_domain_label = torch.ones(target_domain_output.shape[0],target_domain_output.shape[2]).type(torch.LongTensor).to(device)
 
-                    ###target loss
+                    # target loss
                     target_train_label_loss = label_criterion(target_train_output, target_train_labels, target_train_input_lengths, target_train_label_lengths)
                     target_train_domain_loss = domain_criterion(target_domain_output, target_domain_label)
 
@@ -68,7 +66,7 @@ def DANN_train(model, device, source_train_loader, target_train_loader, val_load
                     domain_loss = source_train_domain_loss
                     trn_loss = label_loss + domain_loss
 
-                ###loss
+                # loss
                 trn_loss.backward()
 
                 experiment.log_metric('Label_loss', label_loss.item(), step=iter_meter.get())
@@ -109,19 +107,18 @@ def DANN_train(model, device, source_train_loader, target_train_loader, val_load
                 print('Epoch: {:4d}/{} | Val loss: {:.6f}'.format(epoch, epochs, val_loss))
                 print('Average CER: {:.2f}% | Average WER: {:.2f}%\n'.format(round(avg_cer*100,2), round(avg_wer*100,2)))
 
-
-###test
+# test
 def DANN_test(model, device, test_loader, criterion, experiment):
     
-    save_path='/home/skgudwn34/Accented_speech/speech_recognition/result/'
+    save_path = '/home/skgudwn34/Accented_speech/speech_recognition/result/'
     now = time.localtime()
 
     print("DANN test start")
     
     model.eval()
     
-    test_loss=0.0
-    test_cer,test_wer=[],[]
+    test_loss = 0.0
+    test_cer, test_wer = [], []
 
     with experiment.test():
         with open(save_path+"%04d_%02d_%02d_%02d_%02d_alignment.txt"%(

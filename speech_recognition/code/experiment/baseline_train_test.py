@@ -5,7 +5,7 @@ import time
 from decoder import GreedyDecoder
 from error_rate import WER, CER
 
-###training
+# training
 def baseline_train(model, device, source_train_loader, val_loader, criterion, optimizer, epochs, iter_meter, experiment):
     save_path='/home/skgudwn34/Accented_speech/speech_recognition/result/'
 
@@ -19,7 +19,7 @@ def baseline_train(model, device, source_train_loader, val_loader, criterion, op
 
                 optimizer.zero_grad()
 
-                ###source data
+                # source data
                 source_train_spectrograms, source_train_labels, source_train_input_lengths, source_train_label_lengths = source_train
                 source_train_spectrograms, source_train_labels = source_train_spectrograms.to(device), source_train_labels.to(device)
             
@@ -27,7 +27,7 @@ def baseline_train(model, device, source_train_loader, val_loader, criterion, op
                 source_train_output = F.log_softmax(source_train_output, dim=2)
                 source_train_output = source_train_output.transpose(0, 1) # (time, batch, n_class)
                 
-                ###loss
+                # loss
                 source_train_loss = criterion(source_train_output, source_train_labels, source_train_input_lengths, source_train_label_lengths)
                 
                 train_loss = source_train_loss
@@ -41,7 +41,7 @@ def baseline_train(model, device, source_train_loader, val_loader, criterion, op
             with torch.no_grad():
 
                 val_loss = 0.0
-                val_cer, val_wer = [] , []
+                val_cer, val_wer = [], []
 
                 for val_idx, val_data in enumerate(val_loader):
 
@@ -69,18 +69,17 @@ def baseline_train(model, device, source_train_loader, val_loader, criterion, op
                 print('Epoch: {:4d}/{} | Val loss: {:.6f}'.format(epoch, epochs, val_loss))
                 print('Average CER: {:.2f}% | Average WER: {:.2f}%\n'.format(round(avg_cer*100,2), round(avg_wer*100,2)))
 
-
-###test
+# test
 def baseline_test(model, device, test_loader, criterion, experiment):
-    save_path='/home/skgudwn34/Accented_speech/speech_recognition/result/'
+    save_path = '/home/skgudwn34/Accented_speech/speech_recognition/result/'
     now = time.localtime()
 
     print("Baseline test start")
     
     model.eval()
     
-    test_loss=0.0
-    test_cer,test_wer=[],[]
+    test_loss = 0.0
+    test_cer, test_wer = [], []
 
     with experiment.test():
         with open(save_path+"%04d_%02d_%02d_%02d_%02d_alignment.txt"%(
