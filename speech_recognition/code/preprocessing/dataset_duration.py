@@ -13,7 +13,7 @@ def get_duration(file_dir, accent_type):
         file_len = librosa.get_duration(filename=file_name)
         duration += file_len
 
-    ###convert seconds to hours
+    # convert seconds to hours
     file_nums = len(file_list)
     dataset_duration =  round(duration/3600)
 
@@ -23,7 +23,7 @@ def get_duration(file_dir, accent_type):
 
 if __name__=='__main__':
 
-    ### Australia, Canada, England, India, US
+    # Australia, Canada, England, India, US
     train_folder = '/home/skgudwn34/Accented_speech/speech_recognition/cv4_datasetlim/train_dataset/'
     val_folder = '/home/skgudwn34/Accented_speech/speech_recognition/cv4_datasetlim/val_dataset/'
     test_folder = '/home/skgudwn34/Accented_speech/speech_recognition/cv4_datasetlim/test_dataset/'

@@ -3,15 +3,14 @@ import os
 import re
 import shutil
 
-
-###file read
+# file read
 validated_file=open('validated.csv','r',encoding='UTF8')
 
-###regular expression
+# regular expression
 pattern='[^\w\s\']'
 repl=''
 
-###file write
+# file write
 australia_validated=open('australia_validated.csv','w',newline='',encoding='UTF8')
 canada_validated=open('canada_validated.csv','w',newline='',encoding='UTF8')
 england_validated=open('england_validated.csv','w',newline='',encoding='UTF8')
@@ -45,7 +44,7 @@ for validated in validated_read:
     elif validated[7] == 'us' :
         usv.writerow([validated[1].replace('mp3','wav'),validated[7],re.sub(pattern=pattern,repl=repl,string=validated[2].upper())])
 
-### file close
+# file close
 validated_file.close()
 
 australia_validated.close()

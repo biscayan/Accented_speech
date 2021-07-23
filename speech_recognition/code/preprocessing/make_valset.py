@@ -4,16 +4,16 @@ import pandas as pd
 import torchaudio
 import unicodedata
 
-#####path수정 필요
+# path수정 필요
 
-###csv path
+# csv path
 aus_csv=open('/home/skgudwn34/Accented_speech/speech_recognition/csv/australia_validated.csv','r',encoding='UTF8')
 can_csv=open('/home/skgudwn34/Accented_speech/speech_recognition/csv/canada_validated.csv','r',encoding='UTF8')
 eng_csv=open('/home/skgudwn34/Accented_speech/speech_recognition/csv/england_validated.csv','r',encoding='UTF8')
 ind_csv=open('/home/skgudwn34/Accented_speech/speech_recognition/csv/india_validated.csv','r',encoding='UTF8')
 us_csv=open('/home/skgudwn34/Accented_speech/speech_recognition/csv/us_validated.csv','r',encoding='UTF8')
 
-###data path
+# data path
 aus_path='/home/skgudwn34/Accented_speech/speech_recognition/cv4_datasetlim/val_dataset/Australia/'
 can_path='/home/skgudwn34/Accented_speech/speech_recognition/cv4_datasetlim/val_dataset/Canada/'
 eng_path='/home/skgudwn34/Accented_speech/speech_recognition/cv4_datasetlim/val_dataset/England/'
@@ -21,7 +21,6 @@ ind_path='/home/skgudwn34/Accented_speech/speech_recognition/cv4_datasetlim/val_
 us_path='/home/skgudwn34/Accented_speech/speech_recognition/cv4_datasetlim/val_dataset/US/'
 
 save_path='/home/skgudwn34/Accented_speech/speech_recognition/input_data/'
-
 
 def cleansing(sentence):
 
@@ -34,13 +33,11 @@ def cleansing(sentence):
     
     return str(sentence)
 
-
-###make dataset
+# make dataset
 def make_aus_dataset(data_path,csv_file):
 
     aus_index=0
 
-    ###Australia
     if data_path==aus_path and csv_file==aus_csv:
 
         file_list=[]
@@ -70,7 +67,6 @@ def make_can_dataset(data_path,csv_file):
 
     can_index=0
 
-    ###Canada
     if data_path==can_path and csv_file==can_csv:
 
         file_list=[]
@@ -100,7 +96,6 @@ def make_eng_dataset(data_path,csv_file):
 
     eng_index=0
 
-    ###England
     if data_path==eng_path and csv_file==eng_csv:
 
         file_list=[]
@@ -130,7 +125,6 @@ def make_ind_dataset(data_path,csv_file):
 
     ind_index=0
 
-    ###India
     if data_path==ind_path and csv_file==ind_csv:
 
         file_list=[]
@@ -160,7 +154,6 @@ def make_us_dataset(data_path,csv_file):
 
     us_index=0
 
-    ###US
     if data_path==us_path and csv_file==us_csv:
 
         file_list=[]
@@ -186,7 +179,7 @@ def make_us_dataset(data_path,csv_file):
         return us_df
 
 
-###make dataset
+# make dataset
 aus_val_df=make_aus_dataset(aus_path,aus_csv)
 can_val_df=make_can_dataset(can_path,can_csv)
 eng_val_df=make_eng_dataset(eng_path,eng_csv)
@@ -199,7 +192,7 @@ print(eng_val_df)
 print(ind_val_df)
 print(us_val_df)
 
-###data save
+# data save
 aus_val_df.to_pickle(save_path+'cv4_aus_vallim')
 can_val_df.to_pickle(save_path+'cv4_can_vallim')
 eng_val_df.to_pickle(save_path+'cv4_eng_vallim')

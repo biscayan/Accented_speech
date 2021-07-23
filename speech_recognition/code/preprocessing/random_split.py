@@ -3,8 +3,6 @@ import os
 import random
 import shutil
 
-
-###data split
 def aus_split(prefix, train_dir, val_dir, test_dir):
 
     aus_list = os.listdir(prefix+'Australia')
@@ -137,7 +135,7 @@ def us_split(prefix, train_dir, val_dir, test_dir):
 
 if __name__=='__main__':
 
-    ###file path
+    # file path
     prefix = '/home/skgudwn34/Accented_speech/speech_recognition/cv6_1_validated/'
     
     aus_train_dir = '/home/skgudwn34/Accented_speech/speech_recognition/cv6_1_datasetlim/train_dataset/Australia'
@@ -161,7 +159,7 @@ if __name__=='__main__':
     us_test_dir = '/home/skgudwn34/Accented_speech/speech_recognition/cv6_1_datasetlim/test_dataset/US'
     
 
-    ###main
+    # main
     aus_split(prefix, aus_train_dir, aus_val_dir, aus_test_dir)
     can_split(prefix, can_train_dir, can_val_dir, can_test_dir)
     eng_split(prefix, eng_train_dir, eng_val_dir, eng_test_dir)
