@@ -4,9 +4,11 @@ CNN, LSTM, GRU를 이용하여 English accent 분류 및 정확도 비교
 <br/>
 
 ## 연구의 목적
-- 억양이 섞인 발화는 표준발화에 비해 인식을 하기가 많이 어렵습니다.  
-- Input data의 억양이 무엇인지 분류해낼 수 있다면, 그 결과물은 음성인식 실험에서도 활용될 수 있습니다.  
-- 따라서 본 연구에서는 CNN, LSTM, GRU 모델을 사용하여 input data의 accent를 분류하였고 accent 분류의 정확도를 비교하였습니다.  
+억양이 섞인 발화는 표준발화에 비해 인식을 하기가 많이 어렵습니다.  
+
+만약 Input data의 억양이 무엇인지 분류해낼 수 있다면, 그 결과물을 음성인식 실험에서 활용하여 음성인식의 성능을 높일 수 있습니다.  
+
+따라서 본 연구에서는 CNN, LSTM, GRU 모델을 사용하여 input data의 accent를 분류하였고 accent 분류의 정확도를 비교하였습니다.  
  
 <br/>
 
@@ -32,13 +34,13 @@ CNN, LSTM, GRU를 이용하여 English accent 분류 및 정확도 비교
 
 ## 실험세팅
 ### 코퍼스
-- 실험을 위해서 Mozilla의 [Common voice](https://commonvoice.mozilla.org/ko) 4.0 버전을 사용하였습니다.
+- 실험데이터로 Mozilla의 [Common voice](https://commonvoice.mozilla.org/ko) 4.0 버전을 사용하였습니다.
 - Common Voice는 60개 언어에 대해서 막대한 양의 검증된 음성데이터를 오픈소스로 제공합니다.  
 - Common Voice의 참여자들은 음성파일을 제공할 때 그들의 억양을 같이 알려주기 때문에 억양음성인식에서 유용하게 사용될 수 있습니다.  
 
 #### 억양
 - 본 연구에서는 accent classification 실험을 위해서 5개의 Engliah accent가 사용되었습니다.  
-    - Australia accent (AU), Canada accent (CA), England accent(EN), India accent (IN), US accent (US)
+    - Australian accent (AU), Canadian accent (CA), British English (England) accent (EN), Indian accent (IN), US accent (US)
 
 #### 데이터셋
 - 실험에 사용된 데이터셋은 아래와 같습니다. 
@@ -137,7 +139,7 @@ CNN, LSTM, GRU를 이용하여 English accent 분류 및 정확도 비교
 - CNN, LSTM, GRU 모델의 실험결과를 비교했을 때, CNN02 모델에서 88%로 가장 높은 정확도를 보였습니다.  
 - LSTM 모델의 가장 높은 정확도는 66%, GRU 모델의 가장 높은 정확도는 75%로 CNN 모델보다 현저하게 낮았습니다.  
 - LSTM 모델과 GRU 모델은 모델이 복잡해질수록 정확도가 점점 높아지고 있습니다. 반면에, CNN 모델은 모델이 복잡해질수록 오히려 정확도가 낮아지고 있습니다.  
-- 따라서 LSTM 모델과 GRU 모델은 모델을 복잡하게 만들고 데이터를 더 추가한다면 정확도가 더 높아질 수 있다고 예상되지만 CNN 모델은 확신할 수가 없습니다.  
+- 따라서 LSTM 모델과 GRU 모델은 모델을 복잡하게 만들고 데이터를 더 추가한다면 정확도가 더 높아질 수 있다고 예상되지만 CNN 모델은 성능이 더 좋아질지 확신할 수가 없습니다.  
 - 따라서 후속 프로젝트에서는 데이터의 양을 증가시켜 실험을 진행해 볼 예정입니다.   
 
 <br/>
