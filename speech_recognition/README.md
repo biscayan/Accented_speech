@@ -211,5 +211,5 @@ CTC와 DANN을 이용하여 accented speech recognition의 성능 개선
 
     (1) 우선, GPU 메모리 부족 문제는 병렬처리를 통하여 해결하였습니다. 하지만, 연구소에서 다른 인원들도 GPU를 사용해야 하고 최대로 사용할 수 있는 GPU 메모리의 양은 한정되어 있어서 연구소 인원들과 상의 후 사용할 GPU의 번호를 지정하여 원활히 실험을 진행할 수 있었습니다.  
 
-    (2) 그다음으로 CPU ram에서도 메모리 부족 문제가 발생하였습니다. 연구소에서 사용할 수 있는 ram의 총 용량은 130G 정도로 많은 양임에도 불구하고 메모리 부족 문제가 발생하여 의아했습니다. garbage collect, delete 등 여러 시도를 해보았지만, 여전히 문제가 해결되지 않았습니다.  
+    (2) 그 다음으로 RAM에서도 메모리 부족 문제가 발생하였습니다. 연구소에서 사용할 수 있는 RAM의 총 용량은 130G 정도로 많은 양임에도 불구하고 메모리 부족 문제가 발생하여 의아했습니다. garbage collect, delete 등 여러 시도를 해보았지만, 여전히 문제가 해결되지 않았습니다.  
     몇 일 동안 고심을 하던 와중에 dataset을 작성한 코드를 천천히 살펴보았고 데이터프레임을 읽어올 때 메모리 누수가 발생하는 것을 알게 되었습니다. 따라서 dataset 코드를 [코드 확인](https://github.com/biscayan/Accented_speech/blob/master/speech_recognition/code/experiment/cv_dataset.py) 수정하고 정상적으로 실험을 진행할 수 있었습니다.  
